@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct largelocationbutton: View {
+struct LargeLocationButton: View {
     
     var city:String
     var cost:Int
@@ -15,6 +15,13 @@ struct largelocationbutton: View {
     var numberOfRatings:Int
     var imageString:String
     var height:CGFloat = 330
+    
+    private var formattedAverageRating: String {
+            let averageRatingString = String(averageRating)
+            let splitRating = averageRatingString.split(separator: ".")
+            let decimalPart = splitRating.count > 1 ? String(splitRating[1]) : "0"
+            return "\(splitRating[0]).\(decimalPart) / 5"
+        }
     
     var body: some View {
         VStack(spacing:0){
@@ -38,9 +45,12 @@ struct largelocationbutton: View {
                 Spacer()
                 VStack(alignment: .trailing){
                     HStack{
-                        ForEach(0..<4){_ in
+                        Spacer()
+                        ForEach(0..<Int(averageRating.rounded()), id: \.self) { _ in
+                            
                             Image(systemName: "star.fill")
                                 .foregroundColor(Color.init(red: 220/255, green: 220/255, blue: 0))
+                                .font(.system(size: 15))
                         }
                     }.frame(width:150)
                     HStack{
@@ -48,7 +58,8 @@ struct largelocationbutton: View {
                             .frame(width: 70)
                             .foregroundColor(.gray)
                             .font(.system(size: 12))
-                        Text("\(averageRating)/5")
+                        
+                        Text(formattedAverageRating)
                             .font(.system(size: 20))
                             .frame(width: 60)
                     }
@@ -68,5 +79,5 @@ struct largelocationbutton: View {
 }
 
 #Preview {
-    largelocationbutton(city: "City", cost: 0, averageRating: 2.5, numberOfRatings: 1000, imageString: "")
+    LargeLocationButton(city: "City", cost: 0, averageRating: 2, numberOfRatings: 1000, imageString: "Amsterdam")
 }
